@@ -24,7 +24,7 @@ class Meter extends Model
         $value = intval($value);
         $reading = new Reading(['value' => $value]);
         $reading->reset = $this->detectReset($value);
-        $this->readings()->save($reading);
+        return $this->readings()->save($reading);
     }
 
     public function consumptionForHour($time=null)

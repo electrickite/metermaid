@@ -1,0 +1,37 @@
+#!/usr/bin/env php
+<?php
+
+$meter_id = isset($argv[1]) ? $argv[1] : null;
+
+if (isset($meter_id) && !is_numeric($meter_id)) {
+    echo "Meter ID must be a number!\n";
+    exit(1);
+}
+
+require __DIR__ . '/../vendor/autoload.php';
+
+// Instantiate the app
+$settings = require __DIR__ . '/../src/settings.php';
+$app = new \Slim\App($settings);
+
+// Set up dependencies
+require __DIR__ . '/../src/dependencies.php';
+
+$container = $app->getContainer();
+
+if ($meter_id) {
+    $meter_id = intval($meter_id);
+    echo "Reading meter {$meter_id}...\n";
+    $success = $container['reader']->read($meter_id);
+} else {
+    echo "Reading all meters...\n";
+    $success = $container['reader']->readAll();  
+}
+
+if ($success) {
+    echo "Meter reading successful\n";
+    exit(0);
+} else {
+    echo "Meter reading failed!\n";
+    exit(2);
+}

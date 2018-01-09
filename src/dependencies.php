@@ -16,5 +16,5 @@ $container['db']->bootEloquent();
 
 // Meter reading service object
 $container['reader'] = function ($container) {
-    return new AmrReader($container['settings']['rtlamr_path']);
+    return new \App\Service\AmrReader($container['settings']['rtlamr_path']);
 };

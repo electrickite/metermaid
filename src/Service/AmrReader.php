@@ -22,8 +22,21 @@ class AmrReader
         $value = $this->getMeterReading($meter);
 
         if ($value !== false) {
-            $meter->takeReading($value);
+            return $meter->takeReading($value);
+        } else {
+            return false;
         }
+    }
+
+    public function readAll()
+    {
+        $result = true;
+        foreach (Meter::all() as $meter) {
+            if (!$this->read($meter)) {
+                $result = false;
+            }
+        }
+        return $result;
     }
 
     protected function findMeter(&$meter)
