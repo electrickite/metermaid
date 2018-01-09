@@ -54,8 +54,11 @@ class AmrReader
         $key = $this->consumptionMessageKey($meter->protocol);
 
         try {
-            exec("{$this->binary_path} -msgtype={$msg} -format=json -filterid={$id} -filtertype={$type} -single=true -duration=3m", $output);
-            $result = json_decode(implode("\n", $output), true);
+            for ($i = 0; $i <= 1; $i++) {
+                exec("{$this->binary_path} -msgtype={$msg} -format=json -filterid={$id} -filtertype={$type} -single=true -duration=3m 2>/dev/null", $output);
+                $result = json_decode(implode("\n", $output), true);
+                if (!empty($result)) { break; }
+            }
 
             if (isset($result['Message'][$key]) && $result['Message'][$key] > 0) {
                 return $result['Message'][$key];

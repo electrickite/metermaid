@@ -30,32 +30,32 @@ class Meter extends Model
     public function consumptionForHour($time=null)
     {
         $time = $time ?: time();
-        $last = $this->readings()->hourOf(strtotime('-1 hour', $time))->last();
-        $current = $this->readings()->hourOf($time)->last();
+        $last = $this->readings()->hourOf(strtotime('-1 hour', $time))->ordered()->first();
+        $current = $this->readings()->hourOf($time)->ordered()->first();
         return $this->calculateConsumption($last, $current);
     }
 
     public function consumptionForDay($time=null)
     {
         $time = $time ?: time();
-        $last = $this->readings()->dayOf(strtotime('-1 day', $time))->last();
-        $current = $this->readings()->dayOf($time)->last();
+        $last = $this->readings()->dayOf(strtotime('-1 day', $time))->ordered()->first();
+        $current = $this->readings()->dayOf($time)->ordered()->first();
         return $this->calculateConsumption($last, $current);
     }
 
     public function consumptionForWeek($time=null)
     {
         $time = $time ?: time();
-        $last = $this->readings()->weekOf(strtotime('-1 week', $time))->last();
-        $current = $this->readings()->weekOf($time)->last();
+        $last = $this->readings()->weekOf(strtotime('-1 week', $time))->ordered()->first();
+        $current = $this->readings()->weekOf($time)->ordered()->first();
         return $this->calculateConsumption($last, $current);
     }
 
     public function consumptionForMonth($time=null)
     {
         $time = $time ?: time();
-        $last = $this->readings()->monthOf(strtotime('-1 month', $time))->last();
-        $current = $this->readings()->monthOf($time)->last();
+        $last = $this->readings()->monthOf(strtotime('-1 month', $time))->ordered()->first();
+        $current = $this->readings()->monthOf($time)->ordered()->first();
         return $this->calculateConsumption($last, $current);
     }
 
@@ -80,7 +80,7 @@ class Meter extends Model
 
     protected function detectReset($value)
     {
-        $last_reading = $this->readings()->last();
+        $last_reading = $this->readings()->ordered()->first();
         return $last_reading && $value < $last_reading->value;
     }
 }

@@ -42,9 +42,9 @@ class Reading extends Model
                      ->where('created_at', '<', $this->toDateTime(strtotime('first day of next month', $time)));
     }
 
-    public function scopeLast($query)
+    public function scopeOrdered($query)
     {
-        return $query->orderBy('created_at', 'desc')->first();
+        return $query->orderBy('created_at', 'desc');
     }
 
     protected function toDateTime($time)
