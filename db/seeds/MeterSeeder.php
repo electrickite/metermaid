@@ -1,6 +1,7 @@
 <?php
 
 use Phinx\Seed\AbstractSeed;
+use App\Model\Reading;
 
 class MeterSeeder extends AbstractSeed
 {
@@ -41,46 +42,41 @@ class MeterSeeder extends AbstractSeed
                ->save();
 
         $readings = $this->table('readings');
-        $reading1 = ['value' => 1015000];
-        $reading2 = ['value' => 475500];
+        $value1 = 1015000;
+        $value2 = 475500;
 
         for ($i = 0; $i < 8760; $i++) {
             $current_time = ($i * 3600) + $start_time;
-            $value1 = intval($reading1['value'] + $this->getRandomValue(125, 50));
-            $value2 = intval($reading2['value'] + $this->getRandomValue(170, 50));
-            $date1 = date('Y-m-d H:i:s', $this->getRandomValue($current_time, 420));
-            $date2 = date('Y-m-d H:i:s', $this->getRandomValue($current_time, 420));
+            $value1 = intval($value1 + $this->getRandomValue(125, 50));
+            $value2 = intval($value2 + $this->getRandomValue(170, 50));
+            $date1 = date('Y-m-d H:i:s', $this->getRandomValue($current_time, 420, false));
+            $date2 = date('Y-m-d H:i:s', $this->getRandomValue($current_time, 420, false));
 
-            $reading1 = [
-                'meter_id'    => 1,
-                'value'       => $value1,
-                'consumption' => $value1 - $reading1['value'],
-                'interval'    => 0,
-                'reset'       => false,
-                'inferred'    => false,
-                'created_at'  => $date1,
-                'updated_at'  => $date1,
+            $data = [
+                [
+                    'meter_id'    => 1,
+                    'value'       => $value1,
+                    'reset'       => false,
+                    'created_at'  => $date1,
+                    'updated_at'  => $date1,
+                ],[
+                    'meter_id'    => 2,
+                    'value'       => $value2,
+                    'reset'       => false,
+                    'created_at'  => $date2,
+                    'updated_at'  => $date2,
+                ]
             ];
 
-            $reading2 = [
-                'meter_id'    => 2,
-                'value'       => $value2,
-                'consumption' => $value2 - $reading2['value'],
-                'interval'    => 0,
-                'reset'       => false,
-                'inferred'    => false,
-                'created_at'  => $date2,
-                'updated_at'  => $date2,
-            ];
-
-            $readings->insert([$reading1, $reading2])
+            $readings->insert($data)
                      ->save();
         }
     }
 
-    protected function getRandomValue($start, $var)
+    protected function getRandomValue($start, $var, $symmetric=true)
     {
-        $modifier = rand(-100, 100) * 0.01;
+        $min = $symmetric ? -100 : 0;
+        $modifier = rand($min, 100) * 0.01;
         return $start + ($modifier * $var);
     }
 }

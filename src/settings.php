@@ -24,5 +24,7 @@ return [
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
         ],
+
+        'rtlamr_path' => getenv('RTLAMR_PATH') ?: '/usr/local/bin/rtlamr',
     ],
 ];

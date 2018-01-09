@@ -25,16 +25,12 @@ class CreateInitialTables extends AbstractMigration
         $table = $this->table('readings');
         $table->addColumn('meter_id', 'integer', ['null' => false])
               ->addColumn('value', 'integer', ['null' => false])
-              ->addColumn('consumption', 'integer', ['null' => false])
-              ->addColumn('interval', 'integer', ['null' => false])
               ->addColumn('reset', 'boolean', ['default' => false])
-              ->addColumn('inferred', 'boolean', ['default' => false])
               ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP', 'null' => false])
               ->addColumn('updated_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP', 'null' => false])
               ->addForeignKey('meter_id', 'meters', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE'])
               ->addIndex(['id'])
               ->addIndex(['meter_id'])
-              ->addIndex(['interval'])
               ->addIndex(['created_at'])
               ->create();
     }

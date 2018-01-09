@@ -13,3 +13,8 @@ $container['db'] = function ($container) {
 
 $container['db']->setAsGlobal();
 $container['db']->bootEloquent();
+
+// Meter reading service object
+$container['reader'] = function ($container) {
+    return new AmrReader($container['settings']['rtlamr_path']);
+};
